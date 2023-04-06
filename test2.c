@@ -4,33 +4,35 @@
 #include <fcntl.h>
 #include <string.h>
 
+char	*buff_max(char *buffer, char *n_line, char *n_buff)
+{
+	n_buff = realloc(buffer, BUFFER_SIZE * 2);
+	if (!n_buff)
+		return (NULL);
+	buffer = n_buff;
+	n_line = buffer + BUFFER_SIZE;
+	return (n_line);
+}
+
 char	*get_next_line(int fd)
 {
 	int			i;
 	char		c;
 	static char	*buffer;
-	static char	*new_line;
-	char		*new_buffer;
-	ssize_t		bytes_read;
+	static char	*n_line;
+	char		*n_buff;
 
 	buffer = calloc(BUFFER_SIZE, sizeof(char));
-	new_line = buffer;
+	n_line = buffer;
 	c = '\0';
 	i = 0;
 	while (c != '\n')
 	{
-		if (new_line == buffer + BUFFER_SIZE)
-		{
-			new_buffer = realloc(buffer, BUFFER_SIZE * 2);
-			if (!new_buffer)
+		if (n_line == buffer + BUFFER_SIZE)
+			if (buff_max(buffer, n_line, n_buff) == NULL)
 				break ;
-			buffer = new_buffer;
-			new_line = buffer + BUFFER_SIZE;
-		}
-		bytes_read = read(fd, new_line, 1);
-		if (bytes_read <= 0)
-			break ;
-		c = *new_line++;
+		read(fd, n_line, 1);
+		c = *n_line++;
 		buffer[i++] = c;
 	}
 	buffer[i] = '\0';
@@ -45,10 +47,10 @@ int main(int argc, char *argv[])
 	int fd = open("hello.txt", O_RDONLY);
 	line = get_next_line(fd);
 	printf("%s", line);
-	// line = get_next_line(fd);
-	// printf("%s", line);
-	// line = get_next_line(fd);
-	// printf("%s", line);
+	line = get_next_line(fd);
+	printf("%s", line);
+	line = get_next_line(fd);
+	printf("%s", line);
 	free(line);
 	close(fd);
 	return (0);
