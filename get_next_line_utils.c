@@ -6,7 +6,7 @@
 /*   By: njantsch <njantsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 14:33:32 by njantsch          #+#    #+#             */
-/*   Updated: 2023/04/06 18:40:41 by njantsch         ###   ########.fr       */
+/*   Updated: 2023/04/07 14:56:59 by njantsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,22 @@ void	ft_bzero(void *s, size_t n)
 		i++;
 	}
 }
+
 char	*ft_strdup(const char *s1)
 {
-	size_t	len;
-	char	*dest;
+	char	*res;
+	int		i;
 
-	len = ft_strlen(s1) + 1;
-	dest = malloc(len);
-	if (dest == NULL)
+	i = 0;
+	while (s1[i])
+		i++;
+	res = ft_calloc(sizeof(char), i + 1);
+	if (!res)
 		return (NULL);
-	ft_memcpy(dest, s1, len);
-	return (dest);
+	i = -1;
+	while (s1[++i])
+		res[i] = s1[i];
+	return (res);
 }
 
 void	*ft_memcpy(void *dst, const void *src, size_t n)
@@ -70,22 +75,24 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 
 void	*ft_realloc(void *ptr, size_t size)
 {
-	void *new_ptr;
-	size_t *size_ptr;
-	size_t old_size;
+	void	*new_ptr;
+	size_t	*size_ptr;
+	size_t	old_size;
 
-	size_ptr = (size_t *)ptr;
+	if (!ptr)
+		return (malloc(size));
 	if (!size)
 	{
 		free(ptr);
 		return (NULL);
 	}
-	if (size <= size_ptr)
+	size_ptr = (size_t *)ptr - 1;
+	old_size = *size_ptr;
+	if (size <= old_size)
 		return (ptr);
 	new_ptr = malloc(size);
-	if (!ptr)
-		return (new_ptr);
-	old_size = size_ptr;
+	if (!new_ptr)
+		return (NULL);
 	ft_memcpy(new_ptr, ptr, old_size);
 	free(ptr);
 	return (new_ptr);

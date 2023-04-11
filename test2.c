@@ -4,7 +4,7 @@
 #include <fcntl.h>
 #include <string.h>
 
-char	*buff_max(char *buffer, char *n_line, char *n_buff)
+static char	*buff_max(char *buffer, char *n_line, char *n_buff)
 {
 	n_buff = realloc(buffer, BUFFER_SIZE * 2);
 	if (!n_buff)
@@ -22,6 +22,7 @@ char	*get_next_line(int fd)
 	static char	*n_line;
 	char		*n_buff;
 
+	n_buff = NULL;
 	buffer = calloc(BUFFER_SIZE, sizeof(char));
 	n_line = buffer;
 	c = '\0';
@@ -41,7 +42,7 @@ char	*get_next_line(int fd)
 	return (strdup(buffer));
 }
 
-int main(int argc, char *argv[])
+int main(void)
 {
 	char *line = NULL;
 	int fd = open("hello.txt", O_RDONLY);

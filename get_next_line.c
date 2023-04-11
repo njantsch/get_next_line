@@ -6,16 +6,15 @@
 /*   By: njantsch <njantsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 12:57:29 by njantsch          #+#    #+#             */
-/*   Updated: 2023/04/06 19:04:26 by njantsch         ###   ########.fr       */
+/*   Updated: 2023/04/11 17:59:38 by njantsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#define BUFFER_SIZE
 
-char	*buff_max(char *buffer, char *n_line, char *n_buff)
+char	*buff_max(char *buffer, char *n_line, char *n_buff, int line_len)
 {
-	n_buff = ft_realloc(buffer, BUFFER_SIZE * 2);
+	n_buff = ft_realloc(buffer, line_len + BUFFER_SIZE);
 	if (!n_buff)
 		return (NULL);
 	buffer = n_buff;
@@ -23,28 +22,48 @@ char	*buff_max(char *buffer, char *n_line, char *n_buff)
 	return (n_line);
 }
 
+char	*read_loop(char *buffer, char *n_line, char *n_buff, int line_len)
+{
+	int			buffer_index;
+	static int	bytes_read;
+
+	line_len = 0;
+	buffer_index = 0;
+	bytes_read = read(fd, buffer, BUFFER_SIZE);
+	while (buffer_index < bytes_read && buffer[buffer_index] != '\n')
+	{
+		line_len++;
+		buffer_index++;
+	}
+	if (buffer[buffer_index] == '\n')
+	{
+
+	}
+	n_line = buff_max(buffer, n_line, n_buff, line_len);
+
+
+}
+
 char	*get_next_line(int fd)
 {
-	int			i;
-	char		c;
+	static int	line_len;
 	static char	*buffer;
-	static char	*n_line;
+	char		*n_line;
 	char		*n_buff;
 
+	n_buff = NULL;
+	line_len = 0;
 	buffer = ft_calloc(BUFFER_SIZE, sizeof(char));
 	n_line = buffer;
-	c = '\0';
-	i = 0;
-	while (c != '\n')
+	while (1)
 	{
-		if (n_line == buffer + BUFFER_SIZE)
-			if (buff_max(buffer, n_line, n_buff) == NULL)
-				break ;
-		read(fd, n_line, 1);
-		c = *n_line++;
-		buffer[i++] = c;
+		n_buff = read_loop(buffer, n_line, n_buff, line_len);
+		if (!n_buff)
+			return (NULL);
+		else if ()
+
 	}
-	buffer[i] = '\0';
+	*buffer = '\0';
 	if (i == 0)
 		return (NULL);
 	return (ft_strdup(buffer));
