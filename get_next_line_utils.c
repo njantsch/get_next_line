@@ -6,11 +6,25 @@
 /*   By: njantsch <njantsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 14:33:32 by njantsch          #+#    #+#             */
-/*   Updated: 2023/04/07 14:56:59 by njantsch         ###   ########.fr       */
+/*   Updated: 2023/04/12 16:36:41 by njantsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+size_t	ft_strlen(const char *s)
+{
+	int	i;
+
+	i = 0;
+	if (!s)
+		return (0);
+	while (s[i])
+	{
+		i++;
+	}
+	return (i);
+}
 
 void	*ft_calloc(size_t count, size_t size)
 {
@@ -37,23 +51,6 @@ void	ft_bzero(void *s, size_t n)
 	}
 }
 
-char	*ft_strdup(const char *s1)
-{
-	char	*res;
-	int		i;
-
-	i = 0;
-	while (s1[i])
-		i++;
-	res = ft_calloc(sizeof(char), i + 1);
-	if (!res)
-		return (NULL);
-	i = -1;
-	while (s1[++i])
-		res[i] = s1[i];
-	return (res);
-}
-
 void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
 	size_t			i;
@@ -73,27 +70,31 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 	return (dest);
 }
 
-void	*ft_realloc(void *ptr, size_t size)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	void	*new_ptr;
-	size_t	*size_ptr;
-	size_t	old_size;
+	unsigned int	i;
+	unsigned int	j;
+	char			*res;
 
-	if (!ptr)
-		return (malloc(size));
-	if (!size)
+	i = 0;
+	j = 0;
+	res = (char *)malloc(ft_strlen((char *)s1) + ft_strlen((char *)s2) + 1);
+	if (res == NULL)
+		return (NULL);
+	if (s1)
 	{
-		free(ptr);
-		return (NULL);
+		while (s1[i])
+		{
+			res[i] = s1[i];
+			i++;
+		}
 	}
-	size_ptr = (size_t *)ptr - 1;
-	old_size = *size_ptr;
-	if (size <= old_size)
-		return (ptr);
-	new_ptr = malloc(size);
-	if (!new_ptr)
-		return (NULL);
-	ft_memcpy(new_ptr, ptr, old_size);
-	free(ptr);
-	return (new_ptr);
+	while (s2[j])
+	{
+		res[i] = s2[j];
+		j++;
+		i++;
+	}
+	res[i] = '\0';
+	return (res);
 }
