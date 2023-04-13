@@ -6,7 +6,7 @@
 /*   By: njantsch <njantsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 12:57:29 by njantsch          #+#    #+#             */
-/*   Updated: 2023/04/13 16:12:35 by njantsch         ###   ########.fr       */
+/*   Updated: 2023/04/13 16:30:23 by njantsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,15 +82,11 @@ static int	check_new_line(char *buffer)
 	return (-1);
 }
 
-char	*get_next_line(int fd)
+static char	*read_loop(int fd, char *buffer)
 {
-	int			bytes_read;
-	static char	*buffer;
-	char		*new_buff;
-	char		*line;
+	char	*new_buff;
+	int		bytes_read;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
 	new_buff = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 	if (!new_buff)
 		return (NULL);
@@ -99,11 +95,29 @@ char	*get_next_line(int fd)
 	{
 		bytes_read = read(fd, new_buff, BUFFER_SIZE);
 		if (bytes_read == -1)
-			return (free(new_buff), free(buffer), buffer = NULL, NULL);
+		{
+			free(new_buff);
+			free(buffer);
+			buffer = NULL;
+			return (NULL);
+		}
 		new_buff[bytes_read] = '\0';
 		buffer = ft_strjoin(buffer, new_buff);
 	}
 	free(new_buff);
+	return (buffer);
+}
+
+char	*get_next_line(int fd)
+{
+	static char	*buffer;
+	char		*line;
+
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	buffer = read_loop(fd, buffer);
+	if (!buffer)
+		return (NULL);
 	line = get_line(buffer);
 	buffer = buff_trim(buffer);
 	return (line);
