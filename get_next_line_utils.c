@@ -6,7 +6,7 @@
 /*   By: njantsch <njantsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 14:33:32 by njantsch          #+#    #+#             */
-/*   Updated: 2023/04/14 15:45:43 by njantsch         ###   ########.fr       */
+/*   Updated: 2023/04/14 16:42:43 by njantsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,6 @@ char	*ft_strjoin(char *s1, char *s2)
 
 	i = 0;
 	j = 0;
-	if (!s1)
-	{
-		s1 = ft_calloc(1, sizeof(char));
-		s1[0] = '\0';
-	}
-	if (!s1 || !s2)
-		return (NULL);
 	res = ft_calloc(ft_strlen(s1) + ft_strlen(s2) + 1, sizeof(char));
 	if (!res)
 		return (NULL);

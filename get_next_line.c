@@ -6,7 +6,7 @@
 /*   By: njantsch <njantsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 12:57:29 by njantsch          #+#    #+#             */
-/*   Updated: 2023/04/14 16:11:42 by njantsch         ###   ########.fr       */
+/*   Updated: 2023/04/14 16:43:03 by njantsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ static char	*get_line(char *buffer)
 		new[j++] = buffer[i++];
 	if (buffer[i] == '\n')
 		new[j++] = buffer[i++];
-	new[i] = '\0';
 	return (new);
 }
 
