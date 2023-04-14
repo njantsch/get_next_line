@@ -6,7 +6,7 @@
 /*   By: njantsch <njantsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 14:33:32 by njantsch          #+#    #+#             */
-/*   Updated: 2023/04/13 13:38:20 by njantsch         ###   ########.fr       */
+/*   Updated: 2023/04/14 15:45:43 by njantsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,26 +51,23 @@ void	ft_bzero(void *s, size_t n)
 	}
 }
 
-void	*ft_memcpy(void *dst, const void *src, size_t n)
+int	check_new_line(char *buffer)
 {
-	size_t			i;
-	unsigned char	*dest;
-	unsigned char	*source;
+	int	i;
 
+	if (!buffer)
+		return (-1);
 	i = 0;
-	dest = (unsigned char *) dst;
-	source = (unsigned char *) src;
-	if (dest == 0 && src == 0)
-		return (0);
-	while (i < n)
+	while (buffer[i] != '\0')
 	{
-		dest[i] = source[i];
+		if (buffer[i] == '\n')
+			return (i);
 		i++;
 	}
-	return (dest);
+	return (-1);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	unsigned int	i;
 	unsigned int	j;
@@ -78,20 +75,23 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 	i = 0;
 	j = 0;
-	res = (char *)malloc(ft_strlen((char *)s1) + ft_strlen((char *)s2) + 1);
+	if (!s1)
+	{
+		s1 = ft_calloc(1, sizeof(char));
+		s1[0] = '\0';
+	}
+	if (!s1 || !s2)
+		return (NULL);
+	res = ft_calloc(ft_strlen(s1) + ft_strlen(s2) + 1, sizeof(char));
 	if (!res)
 		return (NULL);
-	if (s1)
+	while (s1 && s1[i])
 	{
-		while (s1[i])
-		{
-			res[i] = s1[i];
-			i++;
-		}
+		res[i] = s1[i];
+		i++;
 	}
-	while (s2[j])
+	while (s2 && s2[j])
 		res[i++] = s2[j++];
-	res[i] = '\0';
-	free((void *)s1);
+	free(s1);
 	return (res);
 }

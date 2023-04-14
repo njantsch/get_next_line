@@ -6,13 +6,13 @@
 /*   By: njantsch <njantsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 12:57:29 by njantsch          #+#    #+#             */
-/*   Updated: 2023/04/13 16:30:23 by njantsch         ###   ########.fr       */
+/*   Updated: 2023/04/14 16:11:42 by njantsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*buff_trim(char *buffer)
+char	*buff_trim(char *buffer)
 {
 	char	*new;
 	int		i;
@@ -40,6 +40,7 @@ static char	*buff_trim(char *buffer)
 
 static char	*get_line(char *buffer)
 {
+	int		j;
 	int		i;
 	char	*new;
 
@@ -48,41 +49,22 @@ static char	*get_line(char *buffer)
 		return (NULL);
 	while (buffer[i] && buffer[i] != '\n')
 		i++;
-	new = ft_calloc(i + 2, sizeof(char));
+	if (buffer[i] == '\n')
+		i++;
+	new = ft_calloc(i + 1, sizeof(char));
 	if (!new)
 		return (NULL);
 	i = 0;
+	j = 0;
 	while (buffer[i] && buffer[i] != '\n')
-	{
-		new[i] = buffer[i];
-		i++;
-	}
+		new[j++] = buffer[i++];
 	if (buffer[i] == '\n')
-	{
-		new[i] = buffer[i];
-		i++;
-	}
+		new[j++] = buffer[i++];
 	new[i] = '\0';
 	return (new);
 }
 
-static int	check_new_line(char *buffer)
-{
-	int	i;
-
-	if (!buffer)
-		return (-1);
-	i = 0;
-	while (buffer[i] != '\0')
-	{
-		if (buffer[i] == '\n')
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
-static char	*read_loop(int fd, char *buffer)
+char	*read_loop(int fd, char *buffer)
 {
 	char	*new_buff;
 	int		bytes_read;
@@ -98,7 +80,6 @@ static char	*read_loop(int fd, char *buffer)
 		{
 			free(new_buff);
 			free(buffer);
-			buffer = NULL;
 			return (NULL);
 		}
 		new_buff[bytes_read] = '\0';
