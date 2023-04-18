@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: njantsch <njantsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/05 12:57:29 by njantsch          #+#    #+#             */
-/*   Updated: 2023/04/18 13:14:58 by njantsch         ###   ########.fr       */
+/*   Created: 2023/04/18 11:50:53 by njantsch          #+#    #+#             */
+/*   Updated: 2023/04/18 12:06:50 by njantsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*buff_trim(char *buffer)
 {
@@ -90,15 +90,15 @@ char	*read_loop(int fd, char *buffer)
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer;
+	static char	*buffer[4096];
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	buffer = read_loop(fd, buffer);
-	if (!buffer)
-		return (free(buffer), NULL);
-	line = get_line(buffer);
-	buffer = buff_trim(buffer);
+	buffer[fd] = read_loop(fd, buffer[fd]);
+	if (!buffer[fd])
+		return (NULL);
+	line = get_line(buffer[fd]);
+	buffer[fd] = buff_trim(buffer[fd]);
 	return (line);
 }

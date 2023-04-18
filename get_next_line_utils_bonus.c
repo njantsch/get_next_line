@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: njantsch <njantsch@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/05 14:33:32 by njantsch          #+#    #+#             */
-/*   Updated: 2023/04/18 13:03:43 by njantsch         ###   ########.fr       */
+/*   Created: 2023/04/18 11:50:59 by njantsch          #+#    #+#             */
+/*   Updated: 2023/04/18 12:04:34 by njantsch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 size_t	ft_strlen(const char *s)
 {
@@ -77,7 +77,10 @@ char	*ft_strjoin(char *s1, char *s2)
 	j = 0;
 	res = ft_calloc(ft_strlen(s1) + ft_strlen(s2) + 1, sizeof(char));
 	if (!res)
-		return (free(s1), NULL);
+	{
+		free(s1);
+		return (NULL);
+	}
 	while (s1 && s1[i])
 	{
 		res[i] = s1[i];
